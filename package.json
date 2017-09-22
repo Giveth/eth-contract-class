@@ -1,6 +1,6 @@
 {
   "name": "eth-contract-class",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "generate js wrapper class around an ethereum contract",
   "main": "lib/generateClass.js",
   "directories": {
@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel -d ./lib src"
+    "compile": "babel --source-maps -d lib/ src/",
+	"prepublish": "npm run compile"
   },
   "repository": {
     "type": "git",

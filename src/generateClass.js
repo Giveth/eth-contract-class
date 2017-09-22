@@ -19,7 +19,6 @@ const estimateGas = (web3, method, opts) => {
 const execute = (web3, txObject, opts, cb) => {
   const { _method } = txObject;
 
-    console.log('method ->', _method);
   if (_method.constant) return txObject.call(opts);
 
   // we need to create a new PromiEvent here b/c estimateGas returns a regular promise
