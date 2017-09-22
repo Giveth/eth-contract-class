@@ -1,0 +1,33 @@
+{
+  "name": "eth-contract-class",
+  "version": "0.0.1",
+  "description": "generate js wrapper class around an ethereum contract",
+  "main": "lib/generateClass.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel -d ./lib src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Giveth/eth-contract-class.git"
+  },
+  "keywords": [
+    "ethereum"
+  ],
+  "author": "perissology",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Giveth/eth-contract-class/issues"
+  },
+  "homepage": "https://github.com/Giveth/eth-contract-class#readme",
+  "dependencies": {
+    "web3-core-promievent": "^1.0.0-beta.21"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0"
+  }
+}
