@@ -99,10 +99,25 @@ export default (abi, bytecode) => {
         .then(accounts => (accounts.length > 0) ? accounts[0] : undefined);
     };
 
-    return getAccount()
+    // we need to create a new PromiEvent here b/c getAccount returns a regular promise
+    // however on a 'deploy' we want to return a PromiEvent
+    const defer = new Web3PromiEvent();
+    const relayEvent = event => (...params) => defer.eventEmitter.emit(event, ...params);
+
+    getAccount()
       .then(account => Object.assign(opts, { from: account }))
-      .then(() => execute(web3, deploy, opts))
-      .then(contract => new C(web3, contract.options.address));
+      .then(() => execute(web3, deploy, opts)
+            // relay all events to our promiEvent
+            .on('transactionHash', relayEvent('transactionHash'))
+            .on('confirmation', relayEvent('confirmation'))
+            .on('receipt', relayEvent('receipt'))
+            .on('error', relayEvent('error'))
+      )
+      .then(contract => new C(web3, contract.options.address))
+      .then(defer.resolve)
+      .catch(defer.reject);
+
+    return defer.eventEmitter;
   };
 
   return C;
