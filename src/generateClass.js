@@ -28,7 +28,8 @@ const execute = (web3, txObject, opts, cb) => {
 
   estimateGas(web3, txObject, opts)
     .then((gas) => {
-      Object.assign(opts, { gas });
+      // 21272 is min gas to work in testrpc
+      Object.assign(opts, { gas: (gas < 21272) ? 21272 : gas });
       return (cb) ? txObject.send(opts, cb) : txObject.send(opts)
         // relay all events to our promiEvent
         .on('transactionHash', relayEvent('transactionHash'))
@@ -47,7 +48,7 @@ const methodWrapper = (web3, method, ...args) => {
   let opts = {};
 
   if (typeof args[args.length - 1] === 'function') cb = args.pop();
-  if (typeof args[args.length - 1] === 'object') opts = args.pop();
+  if (typeof args[args.length - 1] === 'object' && !Array.isArray(args[args.length - 1])) opts = args.pop();
 
   const txObject = method(...args);
 
@@ -111,7 +112,7 @@ export default (abi, bytecode) => {
             .on('transactionHash', relayEvent('transactionHash'))
             .on('confirmation', relayEvent('confirmation'))
             .on('receipt', relayEvent('receipt'))
-            .on('error', relayEvent('error'))
+            .on('error', relayEvent('error')),
       )
       .then(contract => new C(web3, contract.options.address))
       .then(defer.resolve)
