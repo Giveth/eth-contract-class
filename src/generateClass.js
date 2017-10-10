@@ -6,11 +6,22 @@ function checkWeb3(web3) {
   }
 }
 
+const validOptKeys = ['from', 'to', 'gasPrice', 'gas', 'value', 'data', 'nonce'];
+const filterOpts = (opts) => {
+  const validOpts = {};
+
+  validOptKeys.forEach((key) => {
+    validOpts[key] = opts[key];
+  });
+
+  return validOpts;
+};
+
 const estimateGas = (web3, method, opts) => {
   if (opts.$noEstimateGas) return Promise.resolve(4700000);
   if (opts.$gas || opts.gas) return Promise.resolve(opts.$gas || opts.gas);
 
-  return method.estimateGas(opts)
+  return method.estimateGas(filterOpts(opts))
     // eslint-disable-next-line no-confusing-arrow
     .then(gas => opts.$extraGas ? gas + opts.$extraGas : Math.floor(gas * 1.1));
 };
@@ -19,7 +30,7 @@ const estimateGas = (web3, method, opts) => {
 const execute = (web3, txObject, opts, cb) => {
   const { _method } = txObject;
 
-  if (_method.constant) return txObject.call(opts);
+  if (_method.constant) return txObject.call(filterOpts(opts));
 
   // we need to create a new PromiEvent here b/c estimateGas returns a regular promise
   // however on a 'send' we want to return a PromiEvent
@@ -29,7 +40,7 @@ const execute = (web3, txObject, opts, cb) => {
   estimateGas(web3, txObject, opts)
     .then((gas) => {
       // 21272 is min gas to work in testrpc
-      Object.assign(opts, { gas: (gas < 21272) ? 21272 : gas });
+      Object.assign(filterOpts(opts), { gas: (gas < 21272) ? 21272 : gas });
       return (cb) ? txObject.send(opts, cb) : txObject.send(opts)
         // relay all events to our promiEvent
         .on('transactionHash', relayEvent('transactionHash'))
