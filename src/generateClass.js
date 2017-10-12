@@ -40,8 +40,8 @@ const execute = (web3, txObject, opts, cb) => {
   estimateGas(web3, txObject, opts)
     .then((gas) => {
       // 21272 is min gas to work in testrpc
-      Object.assign(filterOpts(opts), { gas: (gas < 21272) ? 21272 : gas });
-      return (cb) ? txObject.send(opts, cb) : txObject.send(opts)
+      const filteredOpts = Object.assign({}, filterOpts(opts), { gas: (gas < 21272) ? 21272 : gas });
+      return (cb) ? txObject.send(filteredOpts, cb) : txObject.send(filteredOpts)
         // relay all events to our promiEvent
         .on('transactionHash', relayEvent('transactionHash'))
         .on('confirmation', relayEvent('confirmation'))
