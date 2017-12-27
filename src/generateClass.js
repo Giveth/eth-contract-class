@@ -88,7 +88,8 @@ export default (abi, bytecode) => {
     web3.eth.getAccounts()
       .then((accounts) => {
         this.$contract.options.from = (accounts.length > 0) ? accounts[0] : undefined;
-      });
+      })
+      .catch();
   };
 
   C.new = function (web3, ...args) {
