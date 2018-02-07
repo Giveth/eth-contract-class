@@ -45,7 +45,12 @@ const execute = (web3, txObject, opts, cb) => {
         // relay all events to our promiEvent
         .on('transactionHash', relayEvent('transactionHash'))
         .on('confirmation', relayEvent('confirmation'))
-        .on('receipt', relayEvent('receipt'))
+        .on('receipt', (r) => {
+          if (opts.verbose) {
+            console.log(r.gasUsed);
+          }
+          return relayEvent('receipt')(r);
+        })
         .on('error', relayEvent('error'));
     })
     .then(defer.resolve)
