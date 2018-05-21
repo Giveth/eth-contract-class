@@ -21,7 +21,12 @@ const estimateGas = (web3, method, opts) => {
   if (opts.$noEstimateGas) return Promise.resolve(4700000);
   if (opts.$gas || opts.gas) return Promise.resolve(opts.$gas || opts.gas);
 
-  return method.estimateGas(filterOpts(opts))
+  const o = filterOpts(opts);
+  // remove nonce from estimateGas. It isn't necessary and causes
+  // ganache-cli to error when submitting multiple txs asynchronously
+  // before the 1st has been mined
+  delete o.nonce;
+  return method.estimateGas(o)
     // eslint-disable-next-line no-confusing-arrow
     .then(gas => opts.$extraGas ? gas + opts.$extraGas : Math.floor(gas * 1.1));
 };
@@ -39,7 +44,7 @@ const execute = (web3, txObject, opts, cb) => {
 
   estimateGas(web3, txObject, opts)
     .then((gas) => {
-      // 21272 is min gas to work in testrpc
+      // 21272 is min gas to work in older versions of ganache-cli
       const filteredOpts = Object.assign({}, filterOpts(opts), { gas: (gas < 21272) ? 21272 : gas });
       return (cb) ? txObject.send(filteredOpts, cb) : txObject.send(filteredOpts)
         // relay all events to our promiEvent
