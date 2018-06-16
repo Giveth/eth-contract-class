@@ -1,6 +1,6 @@
 {
   "name": "eth-contract-class",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "generate js wrapper class around an ethereum contract",
   "main": "lib/generateClass.js",
   "directories": {
