@@ -80,7 +80,7 @@ const methodWrapper = (web3, method, ...args) => {
 export default (abi, bytecode) => {
   if (!abi) throw new Error('missing abi');
   if (!bytecode || bytecode === '0x') throw new Error('missing bytecode');
-  if (!bytecode.startswith('0x')) bytecode = '0x' + bytecode;
+  if (!bytecode.startsWith('0x')) bytecode = '0x' + bytecode;
 
   const C = function C(web3, address) {
     checkWeb3(web3);
