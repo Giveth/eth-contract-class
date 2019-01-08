@@ -1,1 +1,1 @@
-# eth-class
+# eth-contract-class
