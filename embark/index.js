@@ -7,6 +7,8 @@ module.exports = function() {
     const ContractClass = generateClass(contractRecipe.abiDefinition, contractRecipe.code);
     const contract = new ContractClass(web3, contractRecipe.deployedAddress);
 
+    contract.$runtimeByteCode = '0x' + contractRecipe.runtimeBytecode;
+
     // embark creates a empty Object for contracts when using embark.require('Embark/contracts/*')
     // then uses Object.setPrototypeOf(contractObject, contractFactoryResult) to "populate" the
     // object. Unfortunately this will ensure that the contract instance is not callable directly
