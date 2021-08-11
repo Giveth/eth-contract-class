@@ -16,7 +16,8 @@
     "url": "git+https://github.com/Giveth/eth-contract-class.git"
   },
   "keywords": [
-    "ethereum"
+    "ethereum",
+    "giveth"
   ],
   "author": "perissology",
   "license": "GPL-3.0",
