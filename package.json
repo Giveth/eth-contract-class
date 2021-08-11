@@ -1,5 +1,5 @@
 {
-  "name": "eth-contract-class",
+  "name": "@giveth/eth-contract-class",
   "version": "1.0.0",
   "description": "generate js wrapper class around an ethereum contract",
   "main": "lib/generateClass.js",
