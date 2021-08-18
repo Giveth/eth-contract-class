@@ -77,10 +77,9 @@ const methodWrapper = (web3, method, ...args) => {
 };
 
 
-export default (abi, bytecode) => {
+export default (abi, bytecode = '') => {
   if (!abi) throw new Error('missing abi');
-  if (!bytecode || bytecode === '0x') throw new Error('missing bytecode');
-  if (!bytecode.startsWith('0x')) bytecode = '0x' + bytecode;
+  if (bytecode && !bytecode.startsWith('0x')) bytecode = '0x' + bytecode;
 
   const C = function C(web3, address) {
     checkWeb3(web3);
@@ -107,6 +106,8 @@ export default (abi, bytecode) => {
   };
 
   C.new = function (web3, ...args) {
+    if (!bytecode || bytecode === '0x') throw new Error('missing bytecode');
+
     let opts = {};
     if (args && args.length > 0 && typeof args[args.length - 1] === 'object') {
       opts = args.pop();
