@@ -6,7 +6,7 @@ function checkWeb3(web3) {
   }
 }
 
-const validOptKeys = ['from', 'to', 'gasPrice', 'gas', 'value', 'data', 'nonce'];
+const validOptKeys = ['from', 'to', 'gasPrice', 'gas', 'value', 'data', 'nonce', 'maxFeePerGas', 'maxPriorityFeePerGas'];
 const filterOpts = (opts) => {
   const validOpts = {};
 
